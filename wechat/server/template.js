@@ -4,12 +4,13 @@ module.exports = {
         let date = new Date();
         let replyDate = date.getTime();
         let replyMessage = `<xml>
-    <ToUserName><![CDATA[${message.FromUserName}]]></ToUserName>
-    <FromUserName><![CDATA[${message.ToUserName}]]></FromUserName>
-    <CreateTime>${replyDate}</CreateTime>
-    <MsgType><![CDATA[text]]></MsgType>
-    <Content><![CDATA[${message.content}]]></Content>
-  </xml>`;
+                    <ToUserName><![CDATA[${message.FromUserName}]]></ToUserName>
+                    <FromUserName><![CDATA[${message.ToUserName}]]></FromUserName>
+                    <CreateTime>${replyDate}</CreateTime>
+                    <MsgType><![CDATA[text]]></MsgType>
+                    <Content><![CDATA[${message.content}]]></Content>
+                  </xml>`;
+
         return replyMessage;
     }
 }
@@ -46,5 +47,17 @@ module.exports = {
   <MsgType><![CDATA[event]]></MsgType>
   <Event><![CDATA[subscribe]]></Event>
 </xml>
+
+获取精度和维度
+{
+  ToUserName: 'gh_96337ebb5259',
+  FromUserName: 'oPBuf6haO1mR_ASkIFsWdLxobmSE',
+  CreateTime: '1635081294',
+  MsgType: 'event',
+  Event: 'LOCATION',
+  Latitude: '31.284664',
+  Longitude: '118.369400',
+  Precision: '65.000000'
+}
 
  */

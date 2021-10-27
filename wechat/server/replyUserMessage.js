@@ -28,6 +28,7 @@ module.exports = {
             if (message.Event === 'unsubscribe') {
                 message["content"] = '芜湖港电子小票服务号欢迎您的下次到来～'
             }
+
         }
         console.log(message);
         console.log(TemplateMessage(message));

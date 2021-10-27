@@ -9,12 +9,12 @@ module.exports = {
             "sub_button": [{
                     "type": "view",
                     "name": "堆场分布导览图",
-                    "url": "http://www.baidu.com"
+                    "url": "http://hr6k9r.natappfree.cc/login.html"
                 },
                 {
                     "type": "view",
                     "name": "任务小票",
-                    "url": "http://5qaghs.natappfree.cc/login"
+                    "url": "http://hr6k9r.natappfree.cc/ticket.html"
                 }
             ]
         }

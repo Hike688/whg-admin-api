@@ -3,75 +3,66 @@ const axios = require('axios')
 const { sql_update, sql_chaXun } = require('../../db/mysql')
 const menu = require('./menu')
 class Wechat {
-    constructor() {
-
-        }
+    constructor() {}
         // 获取access_token(getAccessToken) 
     async getAccessToken() {
-        try {
-            const result = await axios({
-                method: 'get',
-                url: 'https://api.weixin.qq.com/cgi-bin/token',
-                params: {
-                    grant_type: 'client_credential',
-                    appid: appID,
-                    secret: appsecret
-                }
-            })
-            return result.data;
-        } catch (error) {
-            return '请求出错' + error;
-        }
-    }
-
-
-
-    //保存下来(saveAccessToken)
-    saveAccessToken(accessToken) {
-        //将access_token保存文件
-        return new Promise((resolve, reject) => {
-            sql_update(accessToken).then(value => {
-                console.log(value);
-            });
-            resolve('保存成功');
-        })
-
-    }
-
-    //读取(readAccessToken)
-    readAccessToken() {
-        //读取本地的access_token文件
-        return new Promise((resolve, reject) => {
             try {
-                sql_chaXun().then(value => {
-                    let data = value[0];
-                    resolve(data);
+                const result = await axios({
+                    method: 'get',
+                    url: 'https://api.weixin.qq.com/cgi-bin/token',
+                    params: {
+                        grant_type: 'client_credential',
+                        appid: appID,
+                        secret: appsecret
+                    }
                 })
+                return result.data;
             } catch (error) {
-                reject('access_token读取失败' + error);
+                return '请求出错' + error;
+            }
+        }
+        //保存下来(saveAccessToken)
+    saveAccessToken(accessToken) {
+            //将access_token保存文件
+            return new Promise((resolve, reject) => {
+                sql_update(accessToken).then(value => {
+                    console.log(value);
+                });
+                resolve('保存成功');
+            })
+
+        }
+        //读取(readAccessToken)
+    readAccessToken() {
+            //读取本地的access_token文件
+            return new Promise((resolve, reject) => {
+                try {
+                    sql_chaXun().then(value => {
+                        let data = value[0];
+                        resolve(data);
+                    })
+                } catch (error) {
+                    reject('access_token读取失败' + error);
+                }
+
+            })
+
+        }
+        // 读取本地文件 判断是否过期 isValidAccessToken
+    isValidAccessToken(data) {
+            // 验证传入的参数是否是有效的
+            if (!data || !data.access_token || !data.expires_in) {
+                //acess_token无效
+                return false
             }
 
-        })
-
-    }
-
-
-    // 读取本地文件 判断是否过期 isValidAccessToken
-    isValidAccessToken(data) {
-        // 验证传入的参数是否是有效的
-        if (!data || !data.access_token || !data.expires_in) {
-            //acess_token无效
-            return false
+            // 检测access_token是否在有效期内
+            let date = new Date();
+            let dateNow = date.getTime();
+            return data.expires_in > dateNow
+                // 如果过期时间大于现在时间 返回ture
         }
-
-        // 检测access_token是否在有效期内
-        let date = new Date();
-        let dateNow = date.getTime();
-        return data.expires_in > dateNow
-            // 如果过期时间大于现在时间 返回ture
-    }
-
-    // 用来获取没有过期的access_token
+        // 用来获取没有过期的access_token
     fetchAccessToken() {
             return new Promise((resolve) => {
                 this.readAccessToken()
@@ -124,23 +115,36 @@ class Wechat {
         }
         //删除菜单
     deleMenu() {
-        return new Promise(async(resolve, reject) => {
-            //定义请求地址
-            const data = await this.fetchAccessToken();
-            const url = `https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=${data.access_token}`;
-            //发送消息
-            try {
-                const result = await axios({
-                    method: 'get',
-                    url: url
-                })
-                resolve(result.data);
-            } catch (error) {
-                reject('请求出错' + error);
-            }
+            return new Promise(async(resolve, reject) => {
+                //定义请求地址
+                const data = await this.fetchAccessToken();
+                const url = `https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=${data.access_token}`;
+                //发送消息
+                try {
+                    const result = await axios({
+                        method: 'get',
+                        url: url
+                    })
+                    resolve(result.data);
+                } catch (error) {
+                    reject('请求出错' + error);
+                }
 
-        })
+            })
+        }
+        //获取code
+    async GetCode() {
+        try {
+            const result = await axios({
+                method: 'get',
+                url: `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appID}&redirect_uri=https%3A%2F%2Fchong.qq.com%2Fphp%2Findex.php%3Fd%3D%26c%3DwxAdapter%26m%3DmobileDeal%26showwxpaytitle%3D1%26vb2ctag%3D4_2030_5_1194_60&response_type=code&scope=nsapi_userinfo&state=123#wechat_redirect`,
+            })
+            return result;
+        } catch (error) {
+            return '请求出错' + error;
+        }
     }
+
 }
 //立即执行函数
 (async() => {
@@ -148,6 +152,8 @@ class Wechat {
     let result = await wx.deleMenu();
     console.log(result);
     result = await wx.creatMenu(menu);
+    console.log(result);
+    result = await wx.GetCode();
     console.log(result);
 })()
 // 读取本地文件

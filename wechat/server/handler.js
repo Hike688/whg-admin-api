@@ -1,6 +1,7 @@
 //验证服务器有效性
 const { getUserDataAsync, parseXmlAsync, formatMessage } = require('../utils/tool')
 const sha1 = require('sha1')
+const { appID, appsecret } = require('../config/index')
     //定义配置对象 
 const config = require('../config');
 const { ReplyUserMessages } = require('./replyUserMessage')
@@ -48,32 +49,17 @@ module.exports = {
                 ///用户消息回复结束地方
             }
         }
+    },
+    //获取code
+    async GetCode() {
+        try {
+            const result = await axios({
+                method: 'get',
+                url: `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appID}&redirect_uri=https%3A%2F%2Fchong.qq.com%2Fphp%2Findex.php%3Fd%3D%26c%3DwxAdapter%26m%3DmobileDeal%26showwxpaytitle%3D1%26vb2ctag%3D4_2030_5_1194_60&response_type=code&scope=nsapi_userinfo&state=123#wechat_redirect`,
+            })
+            return result;
+        } catch (error) {
+            return '请求出错' + error;
+        }
     }
 }
-
-/**用户数据对象
- * {
-  xml: {
-    ToUserName: [ 'gh_96337ebb5259' ],
-    FromUserName: [ 'oPBuf6haO1mR_ASkIFsWdLxobmSE' ],
-    CreateTime: [ '1634953885' ],
-    MsgType: [ 'text' ],
-    Content: [ '1' ],
-    MsgId: [ '23406913516358822' ]
-  }
-}
- */
-/**回复模版消息
- *
- <xml>
-  <ToUserName><![CDATA[toUser]]></ToUserName>
-  <FromUserName><![CDATA[fromUser]]></FromUserName>
-  <CreateTime>12345678</CreateTime>
-  <MsgType><![CDATA[text]]></MsgType>
-  <Content><![CDATA[你好]]></Content>
-</xml>
-
-
-
-
- */
