@@ -115,34 +115,22 @@ class Wechat {
         }
         //删除菜单
     deleMenu() {
-            return new Promise(async(resolve, reject) => {
-                //定义请求地址
-                const data = await this.fetchAccessToken();
-                const url = `https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=${data.access_token}`;
-                //发送消息
-                try {
-                    const result = await axios({
-                        method: 'get',
-                        url: url
-                    })
-                    resolve(result.data);
-                } catch (error) {
-                    reject('请求出错' + error);
-                }
+        return new Promise(async(resolve, reject) => {
+            //定义请求地址
+            const data = await this.fetchAccessToken();
+            const url = `https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=${data.access_token}`;
+            //发送消息
+            try {
+                const result = await axios({
+                    method: 'get',
+                    url: url
+                })
+                resolve(result.data);
+            } catch (error) {
+                reject('请求出错' + error);
+            }
 
-            })
-        }
-        //获取code
-    async GetCode() {
-        try {
-            const result = await axios({
-                method: 'get',
-                url: `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${appID}&redirect_uri=https%3A%2F%2Fchong.qq.com%2Fphp%2Findex.php%3Fd%3D%26c%3DwxAdapter%26m%3DmobileDeal%26showwxpaytitle%3D1%26vb2ctag%3D4_2030_5_1194_60&response_type=code&scope=nsapi_userinfo&state=123#wechat_redirect`,
-            })
-            return result;
-        } catch (error) {
-            return '请求出错' + error;
-        }
+        })
     }
 
 }
@@ -152,8 +140,6 @@ class Wechat {
     let result = await wx.deleMenu();
     console.log(result);
     result = await wx.creatMenu(menu);
-    console.log(result);
-    result = await wx.GetCode();
     console.log(result);
 })()
 // 读取本地文件

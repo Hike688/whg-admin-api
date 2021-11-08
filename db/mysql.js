@@ -59,5 +59,66 @@ module.exports = {
             //断开连接
             db.end();
         })
+    },
+    //查询用户信息
+    sql_UserInfo: (openid) => {
+        return new Promise((resolve, reject) => {
+            var sql_query = 'select * from Driver where OpenID =?'
+            var mysql = require('mysql');
+            var db = mysql.createConnection({
+                host: 'localhost',
+                user: 'root',
+                password: '12345678',
+                port: '3306',
+                database: 'wx_sql'
+            });
+            db.connect((err) => {
+                if (err) throw err;
+                else {
+                    console.log('连接成功')
+                }
+            });
+            db.query(sql_query, [openid], (err, result) => {
+                if (!err) {
+                    if (result.length == 0) {
+                        resolve({ code: '0', data: [] })
+                    }
+                    resolve({ code: '1', data: result[0] });
+                } else {
+                    reject('数据库查询出错' + err);
+                }
+            });
+            //断开连接
+            db.end();
+        })
+    },
+    //更新用户信息
+    sql_updateuerinfo: (params) => {
+        return new Promise((resolve, reject) => {
+            const { phone, openid } = params;
+            var sql_update = 'update Driver set OpenID =? where PhoneNum=?';
+            var db = mysql.createConnection({
+                host: 'localhost',
+                user: 'root',
+                password: '12345678',
+                port: '3306',
+                database: 'wx_sql'
+            });
+            db.connect((err) => {
+                if (err) throw err;
+                else {
+                    console.log('连接成功')
+                }
+            });
+            db.query(sql_update, [openid, phone], (err) => {
+                if (!err) {
+                    resolve('数据库更新成功');
+                } else {
+                    reject('数据库更新出错' + err);
+                }
+            });
+            //断开连接
+            db.end();
+        })
     }
 }
