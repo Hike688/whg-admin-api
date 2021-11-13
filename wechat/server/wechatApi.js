@@ -16,6 +16,7 @@ class Wechat {
                         secret: appsecret
                     }
                 })
+                console.log(result.data);
                 return result.data;
             } catch (error) {
                 return '请求出错' + error;

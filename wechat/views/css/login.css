@@ -1,0 +1,129 @@
+* {
+    margin: 0 auto;
+    padding: 0 0;
+}
+
+.contentLogin {
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.phoneAuth {
+    position: absolute;
+    width: 100%;
+    height: 40vw;
+    overflow: hidden;
+    background-image: url('../img/TopBg.png');
+    background-size: 100% 100%;
+}
+
+.innerAuth {
+    position: relative;
+    top: 20.267vw;
+    color: white;
+    border-radius: 8vw;
+    font-size: 6.667vw;
+    text-align: center;
+    line-height: 10.667vw;
+    overflow: hidden;
+}
+
+.container {
+    position: absolute;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 0.533vw;
+    top: 49.333vw;
+}
+
+.form {
+    width: 100%;
+    overflow: hidden;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.formItem {
+    width: 95.733vw;
+    height: 25.333vw;
+    border-bottom: 0.543vw solid #ccc;
+    font-size: 5.333vw;
+    padding: 0 5.867vw;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.lable {
+    width: 100%;
+    height: 10.667vw;
+    line-height: 10.667vw;
+    font-size: 5.333vw;
+    color: #20358e;
+}
+
+input:focus {
+    outline: none;
+}
+
+.inpuItem {
+    width: 100%;
+    height: 10.667vw;
+}
+
+.inpuItem input {
+    height: 10.667vw;
+    width: 100%;
+    font-size: 4.8vw;
+    border: none;
+}
+
+.inpuItemt {
+    width: 100%;
+    height: 10.667vw;
+    display: flex;
+}
+
+.inpuItemt input {
+    height: 10.667vw;
+    flex: 2;
+    font-size: 4.8vw;
+    border: none;
+}
+
+.inpuItemt .send {
+    flex: 1;
+    line-height: 8vw;
+}
+
+.inpuItemt .send button {
+    background-color: #5fa85f;
+    border-radius: 1.333vw;
+    height: 7.733vw;
+    width: 26.133vw;
+    font-size: 4.8vw;
+    color: white;
+    border: none;
+    margin-top: 1.333vw;
+}
+
+.simulation {
+    position: relative;
+    display: block;
+    width: 24.8vw;
+    font-size: 8vw;
+    height: 11.933vw;
+    color: white;
+    border-radius: 2.667vw;
+    background: #5ea75e;
+    border: none;
+    top: 23.467vw;
+}
+
+.logo {
+    display: block;
+    border: none !important;
+    margin: 29.333vw auto 0vw;
+    width: 70.667vw;
+    height: 20.867vw;
+}

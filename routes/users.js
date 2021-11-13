@@ -20,8 +20,11 @@ router.get('/register', function(req, res) {
 //任务小票
 router.get('/userinfo', function(req, res) {
     UserInfo(req, res);
-})
-
+});
+//测试
+router.get('/demo', function(req, res) {
+    res.render('login', { url: 'http://localhost:3000' });
+});
 
 
 

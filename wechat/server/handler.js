@@ -84,13 +84,12 @@ function GetCookies(req, res) {
 async function ActivationCode(req, res) {
     let userphone = req.query.phone;
     result = await SendAuthCode(userphone);
-    res.json({ 'code': result.code });
+    res.json({ 'code': '1', 'codeValue': result.code });
 }
-//用户手机号激活
+//用户手机号注册
 async function UserRegister(req, res) {
-    console.log(req.query);
     console.log(await sql_updateuerinfo(req.query));
-    res.json({ openid: req.cookies.openid });
+    res.json({ 'code': '1' });
 }
 //用户信息页
 async function UserInfo(req, res) {
@@ -98,7 +97,7 @@ async function UserInfo(req, res) {
         let openid = req.cookies.openid || req.query.opeind;
         var resulter = await sql_UserInfo(openid);
         if (resulter.code == 0) { //说明后台没有当前司机信息。可能是第一次登陆，也可能不是本系统司机               //返回注册页面进行手机短信验证
-            res.render('login', { url: `${Rooturl}`, openid: openid })
+            res.render('login', { url: `${Rooturl}` });
         } else { //当前用户已经不是第一次登陆
             //将用户信息返回，并进入个人小票页面
             res.send(resulter);

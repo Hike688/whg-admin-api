@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/login.css">
+    <title>智慧芜湖港</title>
+</head>
+
+<body>
+
+    <body>
+        <div id="app" class="contentLogin">
+            <div class="phoneAuth">
+                <div class="innerAuth">司机验证</div>
+            </div>
+            <div class="container">
+                <form action="" method="get" class="form">
+                    <div class="formItem" style="border-top:0.543vw solid #ccc;">
+                        <div class="lable">手机号:</div>
+                        <div class="inpuItem">
+                            <input type="text" name="" ref="phone" placeholder="请输入手机号">
+                            <div></div>
+                        </div>
+                    </div>
+                    <div class="formItem">
+                        <div class="lable">验证码:</div>
+                        <div class="inpuItemt">
+                            <input type="text" name="" ref="code" placeholder="请输入手机短信验证码">
+                            <div class="send">
+                                <button type="button" @click="getCode" :disabled="disabled">{{btnTitle}}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>{{tips}}</div>
+                    <button class="simulation" @click="login">登录</button>
+                    <img class="logo" src="/static/img/logo.png" alt="">
+                </form>
+            </div>
+
+        </div>
+
+        <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+        <script src="/static/js/vue.min.js"></script>
+        <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+        <script>
+            var app = new Vue({
+                el: "#app",
+                data: {
+                    disabled: false,
+                    btnTitle: "获取验证码",
+                    tips: "",
+                    codeValue: ""
+                },
+                methods: {
+                    validateBtn: function() {
+                        //倒计时
+                        let time = 60;
+                        let timer = setInterval(() => {
+                            if (time == 0) {
+                                clearInterval(timer);
+                                this.disabled = false;
+                                this.btnTitle = "获取验证码";
+                            } else {
+                                this.btnTitle = time + '秒后重试';
+                                this.disabled = true;
+                                time--
+                            }
+                        }, 1000)
+                    },
+                    getCode: function() {
+                        let _this = this;
+                        if (!/^1[345678]\d{9}$/.test(this.$refs.phone.value)) {
+                            alert('手机号码错误');
+                        } else {
+                            this.validateBtn();
+                            axios.get('<%=url%>/users/sms', {
+                                    params: {
+                                        phone: this.$refs.phone.value
+                                    }
+                                })
+                                .then(res => {
+                                    console.log(res.data.codeValue);
+                                    if (res.data.code == '1') {
+                                        _this.codeValue = res.data.codeValue;
+                                        console.log('短信发送成功!')
+                                    } else {
+                                        console.log('短信发送失败!')
+                                    }
+                                })
+                        }
+                    },
+                    login: function() {
+                        console.log(this.codeValue);
+                        if (!/^1[345678]\d{9}$/.test(this.$refs.phone.value)) {
+                            alert('请输入正确的手机号')
+                            return false
+                        }
+                        if (!(this.$refs.code.value == this.codeValue)) {
+                            alert('请输入验证码')
+                            return false
+                        }
+                        axios.get('<%=url%>/users/register', {
+                                params: {
+                                    phone: this.$refs.phone.value
+                                }
+                            })
+                            .then(res => {
+                                if (res.data.code == '1') {
+                                    // this.$store.state.studentName = res.data.data.studentName
+                                    console.log('注册成功');
+                                    //跳转链接
+                                    window.location.assign("/users/userinfo");
+                                } else {
+                                    alert('注册失败');
+                                }
+                            })
+                    }
+                }
+            })
+        </script>
+    </body>
+</body>
+
+</html>
